@@ -39,7 +39,7 @@ server.post('/api/users', (req, res) => {
 // delete a user
 server.delete('/api/users/:id', (req, res) => {
     const id = req.params.id;
-    // make sure the user you are trying to delete exists? is there a better way? should I .then after this before calling the .remove?
+    // make sure the user you are trying to delete exists? is there a better way? should I .then after findbyid before calling the .remove?
     db.findById(id).then(user => {if (!user) res.status(404).json({ message: "The user with the specified ID does not exist." })});
     db.remove(id).then(user => {
         res.status(204).end();
