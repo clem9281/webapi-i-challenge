@@ -1,27 +1,42 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import axios from "axios";
+import { Row, Col, Container, ListGroup } from "reactstrap";
+import User from "./components/User";
+
 
 class App extends Component {
+  state = {
+    users: []
+  }
+  async componentDidMount() {
+    try {
+      const users = await axios.get("http://localhost:5000/api/users");
+      this.setState({users: users.data})
+    } catch (error) {
+      console.log(error);
+    }
+  }
   render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
+    if (this.state.users) {
+      return (
+        <section className="App bg-light min-vh-100">
+          <Container>
+            <Row>
+              <Col
+                xs={{ size: 12 }}
+                md={{ size: 8, offset: 2 }}
+                lg={{ size: 6, offset: 3 }}
+              >
+               <ListGroup>
+               {this.state.users.map(user => <User user={user} key={user.id}/>)}
+                </ListGroup>
+              </Col>
+            </Row>
+          </Container>
+        </section>
+      );
+    }
+    return <div></div>
   }
 }
 
